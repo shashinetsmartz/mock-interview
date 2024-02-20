@@ -1,0 +1,70 @@
+/* body {
+  margin: 0;
+  font-family: "Whitney";
+  color: "#1A2233";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #FFFFFF;
+  padding: 20px;
+} */
+
+/* code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+} */
+
+/* input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; } */
+/* Works for Firefox */
+/* input[type="number"] { -moz-appearance: textfield; } */
+
+body {
+  margin: 0;
+  font-family: "Inter, sans serif";
+  /* font-size: 20px;
+   */
+  color: "#1A2233";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f5f5f5;
+  padding: 8px 0px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+} /* Works for Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.Toastify__toast-container--top-right {
+  top: 6rem !important;
+}
+
+@media only screen and (min-width: 300px) {
+  .Toastify__toast-container--top-right {
+    top: 4rem !important;
+  }
+}
