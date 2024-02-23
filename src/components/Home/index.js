@@ -211,7 +211,7 @@ const Login = () => {
           component="img"
           src={NetsmartzLogo}
           margin="20px auto"
-          maxWidth="22%"
+          maxWidth={isXs ?"40%": "15%"}
         />
       </Grid>
       <Grid item xs={1.5} />
@@ -222,7 +222,7 @@ const Login = () => {
         // sm={9}
         xs={3}
         justifyContent={"center"}
-        display={isXs ? "block" : "grid"}
+        display={ "grid"}
         minWidth={isXs ? "100%" : "auto"}
         // textAlign="center"
         sx={{

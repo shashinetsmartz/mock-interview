@@ -41,17 +41,19 @@ const NavigationMenu = () => {
       position={"relative"}
       sx={isFoldableMobile ? { flexDirection: "column" } : {}}
     >
-      <Box component="img" src={NETSMARTZ_NAV_LOGO} alt="Netsmartz Logo" pl={1.5} width={200} height={60} />
+      <Box component="img" src={NETSMARTZ_NAV_LOGO} alt="Netsmartz Logo" pl={1.5} width={200} height={60} sx={{
+          display: { xs: "none", sm: "block" }, 
+        }}/>
       <Box
         justifyContent="center"
         sx={
           isXs
-            ? { display: "flex", color: "themeColor", width: "100%" }
+            ? { display: "flex", color: "themeColor", width: "100%", justifyContent:"center" }
             : { display: "flex", color: "themeColor", position: "absolute", left: "31%" }
         }
         // sx={{ flexGrow: 1, display: { xs: "none", sm: "none", md: "flex" } }}
       >
-        <Typography variant="h5" fontWeight={600}>{T.MOCK_INTERVIEW_TOOL}</Typography>
+        <Typography variant="h5" sx={{fontSize: {xs:"20px", sm:"24px"}, px:{xs:2}, py:{xs:1}}} textAlign={"center"} fontWeight={600}>{T.MOCK_INTERVIEW_TOOL}</Typography>
       </Box>
     </Box>
   );

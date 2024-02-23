@@ -1,5 +1,5 @@
 import { Provider } from "react-redux";
-import { HashRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import MainContainer from "components/MainContainer";
 import MainRoute from "router";
 import history from "providers/history";
