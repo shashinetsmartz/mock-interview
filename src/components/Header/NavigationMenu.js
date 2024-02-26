@@ -3,10 +3,13 @@ import { Box, Typography } from "@mui/material";
 
 import T from "T";
 import NETSMARTZ_NAV_LOGO from "assets/Header.png";
+import { useLocation } from "react-router-dom";
 import { GET_SIZE } from "utils/responsive";
 
 const NavigationMenu = () => {
   const { isXs, isFoldableMobile } = GET_SIZE();
+  const location = useLocation();
+  const { pathname }= location;
   // const location = useLocation();
   // const { pathname } = location;
 
@@ -41,9 +44,17 @@ const NavigationMenu = () => {
       position={"relative"}
       sx={isFoldableMobile ? { flexDirection: "column" } : {}}
     >
-      <Box component="img" src={NETSMARTZ_NAV_LOGO} alt="Netsmartz Logo" pl={1.5} width={200} height={60} sx={{
+      {
+        pathname.includes("home")?
+        <Box  pl={1.5} width={200} height={60} sx={{
           display: "block",  margin: isXs && "auto"
         }}/>
+        :
+        <Box component="img" src={NETSMARTZ_NAV_LOGO} alt="Netsmartz Logo" pl={1.5} width={200} height={60} sx={{
+            display: "block",  margin: isXs && "auto"
+          }}/>
+
+      }
       <Box
         justifyContent="center"
         sx={
