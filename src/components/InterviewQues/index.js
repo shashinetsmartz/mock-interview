@@ -11,8 +11,10 @@ import { errorHandler } from "utils/errorHandler";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { APP_PREFIX } from "router/routes";
+import { GET_SIZE } from "utils/responsive";
 
 const InterviewQuestions = () => {
+  const { isXs, isLg, isMd } = GET_SIZE();
   const [getQuestion] = useLazyGetQuestionQuery();
   const [postAudio] = usePostAudioMutation();
   const navigate = useNavigate();
@@ -40,7 +42,6 @@ const InterviewQuestions = () => {
   );
 
   const { questionsList, answersList, questionStep } = localState;
-  console.log(questionsList);
   useEffect(() => {
     getQuestion(questionStep)
       .unwrap()
@@ -109,7 +110,6 @@ const InterviewQuestions = () => {
     mediaRecorder.current.stop();
     mediaRecorder.current.onstop = () => {
       //creates a blob file from the audiochunks data
-      console.log("audioChunks", audioChunks);
       const audioBlob = new Blob(audioChunks, { type: mimeType });
 
       let data = new FormData();
@@ -145,10 +145,10 @@ const InterviewQuestions = () => {
   };
   return (
     <Grid container>
-      <Grid item xs={2} />
+      <Grid item xs={isMd?2:3.25} />
       <Grid
         item
-        xs={5.5}
+        xs={isMd?8:5.5}
         className="questionDiv"
         sx={{
           position: "absolute",
@@ -157,6 +157,8 @@ const InterviewQuestions = () => {
           transform: "translate(-50%, -50%)",
           minHeight: "270px",
           width: "inherit",
+          minWidth:"300px",
+          maxHeight:"650px",
           backgroundColor: "background.white",
           borderRadius: "8px",
           padding: "50px",
@@ -164,6 +166,7 @@ const InterviewQuestions = () => {
           flexDirection: "column",
           justifyContent: "space-between",
           boxShadow: "3px 3px 30px -10px rgba(0,0,0,0.3)",
+          overflowY: "auto",
         }}
       >
         {/* {questionStep < questionsList.length ? */}
@@ -189,7 +192,8 @@ const InterviewQuestions = () => {
                 flexWrap: "wrap",
                 textAlign: "start",
                 // maxWidth: "40%",
-                fontSize: "1.6rem",
+                fontSize: isXs?"1.3rem":"1.6rem",
+                lineHeight: isXs?"1.3":"1.6",
                 fontWeight: "bold",
                 mb: 1.5,
               }}
@@ -212,7 +216,7 @@ const InterviewQuestions = () => {
           {
             // questionStep < questionsList.length ?
             questionStep < 5 ? (
-              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+              <Box sx={{ display: isXs?"block":"flex", justifyContent: "space-between" }}>
                 {/* {!permission ? (
                                     <button onClick={getMicrophonePermission} type="button">
                                         Get Microphone
@@ -235,8 +239,10 @@ const InterviewQuestions = () => {
                     sx={{
                       fontSize: 16,
                       px: 3,
-                      width: 125,
+                      width:isXs ? "100%": 125,
+                      minWidth:"90px",
                       py: 1.3,
+                      mb:2,
                       backgroundColor: "themeColor",
                       borderRadius: 2.1,
                       "&:hover": {
@@ -265,8 +271,10 @@ const InterviewQuestions = () => {
                     }
                     sx={{
                       fontSize: 16,
+                      width:isXs ? "100%": 125,
                       px: 4,
                       py: 1.3,
+                      mb:2,
                       backgroundColor: "themeColor",
                       borderRadius: 2.1,
                       "&:hover": {
@@ -279,7 +287,7 @@ const InterviewQuestions = () => {
                   </Button>
                 ) : null}
                 {audio ? (
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <Box sx={{ display: "flex", alignItems: "center", marginBottom:2 }}>
                     <audio
                       src={audio}
                       controls
@@ -301,15 +309,17 @@ const InterviewQuestions = () => {
                       color: "black",
                       fontWeight: "bold",
                       borderRadius: 2,
-                      width: 100,
+                      width: isXs?"100%":100,
                       fontSize: "15px",
                       px: 1.4,
+                      py: 1.3,
+                      mb:2,
                       "&:hover": {
                         borderColor: "themeColor", // Change to your theme color
                       },
                     }}
                   >
-                    {T.NEXT}{" "}
+                    {T.NEXT}
                   </Button>
                 ) : (
                   <Button
@@ -320,9 +330,11 @@ const InterviewQuestions = () => {
                       color: "black",
                       fontWeight: "bold",
                       borderRadius: 2,
-                      width: 100,
+                      width: isXs?"100%":100,
                       fontSize: "15px",
                       px: 1.4,
+                      py: 1.3,
+                      mb:2,
                       "&:hover": {
                         backgroundColor: "themeColor", // Change to your theme color
                         borderColor: NETSMARTZ_THEME_COLOR,
@@ -354,7 +366,7 @@ const InterviewQuestions = () => {
           }
         </Box>
       </Grid>
-      <Grid item xs={2} />
+      <Grid item xs={isMd?2:3.25} />
     </Grid>
   );
 };

@@ -209,9 +209,11 @@ const Login = () => {
       >
         <Box
           component="img"
+          height="70px"
+          width="170px"
           src={NetsmartzLogo}
-          margin="20px auto"
-          maxWidth={isXs ?"40%": "15%"}
+          margin={isXs?"80px auto 20px auto":"20px auto"}
+          // maxWidth={isXs ?"40%": "15%"}
         />
       </Grid>
       <Grid item xs={1.5} />

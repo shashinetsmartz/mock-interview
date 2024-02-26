@@ -40,7 +40,6 @@ const Home = () => {
 
     }
 
-    console.log(empName, empCode)
     return (
         <Grid container sx={{ marginTop: "100px" }}>
             <Grid item xs={3.5} />

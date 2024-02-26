@@ -76,6 +76,7 @@ import {
   TEXT,
 } from "theme/colors";
 import { MOCK_RESPONSES } from "utils/mockData";
+import { GET_SIZE } from "utils/responsive";
 // import ExpiringProjects from "assets/DashboardAssets/ExpiringProjects.png";
 // import MembersRamped from "assets/DashboardAssets/MembersRamped.png";
 // import NewProjects from "assets/DashboardAssets/NewProjects.png";
@@ -100,7 +101,7 @@ const InterviewResponses = () => {
   //   useEffect(()=>{
   //       getDashboardCountView()
   //   },[])
-
+  const { isXs } = GET_SIZE();
   function convertToTitleCase(str) {
     return str.replace(/_/g, " ").replace(/\b\w/g, function (char) {
       return char.toUpperCase();
@@ -185,9 +186,9 @@ const InterviewResponses = () => {
       <Typography variant="h6" fontWeight={600} mb={1}>
         {T.DASHBOARD_VIEW}
       </Typography>
-      <Grid container p={3} spacing={3}>
+      <Grid container p={3} spacing={3} sx={{mt:isXs && "30px"}}>
         {MOCK_RESPONSES.map((item) => (
-          <Grid item md={3} xs={12}>
+          <Grid item sm={6} lg={3} xs={12}>
             {coloredCard(item)}
           </Grid>
         ))}

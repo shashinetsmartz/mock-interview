@@ -35,14 +35,14 @@ const NavigationMenu = () => {
 
   return (
     <Box
-      display="flex"
+      display={isXs?"block":"flex"}
       justifyContent="space-between"
       alignItems="center"
       position={"relative"}
       sx={isFoldableMobile ? { flexDirection: "column" } : {}}
     >
       <Box component="img" src={NETSMARTZ_NAV_LOGO} alt="Netsmartz Logo" pl={1.5} width={200} height={60} sx={{
-          display: { xs: "none", sm: "block" }, 
+          display: "block",  margin: isXs && "auto"
         }}/>
       <Box
         justifyContent="center"
