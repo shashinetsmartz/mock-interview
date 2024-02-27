@@ -18,7 +18,7 @@ export const api = createApi({
     minCacheTime: DEFAULT_CACHE_SUBSCRIPTION_DURATION,
     prepareHeaders: (headers, { getState }) => {
       const state = getState();
-      headers.set("Content-Type", `multipart/form-data`);
+      headers.set("Content-Type", `application/json`);
       headers.set("ngrok-skip-browser-warning", "69420");
       // const token =
       //   get(sessionStorage, "token") || get(state, "LoginSlice.loginToken");

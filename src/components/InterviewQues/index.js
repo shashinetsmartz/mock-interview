@@ -12,11 +12,13 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { APP_PREFIX } from "router/routes";
 import { GET_SIZE } from "utils/responsive";
+import { useSubmitAudioMutation } from "api/submitAudio";
 
 const InterviewQuestions = () => {
   const { isXs, isLg, isMd } = GET_SIZE();
   const [getQuestion] = useLazyGetQuestionQuery();
   const [postAudio] = usePostAudioMutation();
+  const [submitAudio] = useSubmitAudioMutation();
   const navigate = useNavigate();
   const mimeType = "audio/webm";
   const [permission, setPermission] = useState(false);
@@ -25,6 +27,7 @@ const InterviewQuestions = () => {
   const [stream, setStream] = useState(null);
   const [audioChunks, setAudioChunks] = useState([]);
   const [audio, setAudio] = useState(null);
+  const [audioFormData, setAudioFormData] = useState(null);
   const [localState, setLocalState] = useReducer(
     (prevState, newState) => ({ ...prevState, ...newState }),
     {
@@ -104,26 +107,66 @@ const InterviewQuestions = () => {
   //     });
   // };
 
+  // const stopRecording = () => {
+  //   setRecordingStatus("inactive");
+  //   //stops the recording instance
+  //   mediaRecorder.current.stop();
+  //   mediaRecorder.current.onstop = () => {
+  //     //creates a blob file from the audiochunks data
+  //     const audioBlob = new Blob(audioChunks, { type: mimeType });
+
+  //     let data = new FormData();
+
+  //     // data.append(`audio_${questionStep}`, audioBlob, "recording.wav");
+
+  //     // blobToBase64(audioBlob)
+  //     //     .then((base64String) => {
+  //     //         console.log('base64String', base64String); // Base64 string of the audio blob
+  //     //     })
+  //     //     .catch((error) => {
+  //     //         console.error("Error converting blob to base64:", error);
+  //     //     });
+
+  //     //creates a playable URL from the blob file.
+  //     const audioUrl = URL.createObjectURL(audioBlob);
+  //     setAudio(audioUrl);
+  //     setAudioChunks([]);
+  //   };
+  // };
+
   const stopRecording = () => {
     setRecordingStatus("inactive");
     //stops the recording instance
     mediaRecorder.current.stop();
     mediaRecorder.current.onstop = () => {
       //creates a blob file from the audiochunks data
+      console.log("audioChunks", audioChunks);
       const audioBlob = new Blob(audioChunks, { type: mimeType });
+      //   download(audioBlob);
+      //   blobToBase64(audioBlob)
+      //     .then((base64String) => {
+      //       console.log("base64String", base64String); // Base64 string of the audio blob
+      //     })
+      //     .catch((error) => {
+      //       console.error("Error converting blob to base64:", error);
+      //     });
 
       let data = new FormData();
 
-      // data.append(`audio_${questionStep}`, audioBlob, "recording.wav");
+    //   data.append("text", "this is the transcription of the audio file");
+      data.append("audio_0", audioBlob, "recording.wav");
+      data.append("audio_1", audioBlob, "recording.wav");
+      data.append("audio_2", audioBlob, "recording.wav");
+      data.append("audio_3", audioBlob, "recording.wav");
+      data.append("audio_4", audioBlob, "recording.wav");
+      setAudioFormData(data)
 
-      // blobToBase64(audioBlob)
-      //     .then((base64String) => {
-      //         console.log('base64String', base64String); // Base64 string of the audio blob
-      //     })
-      //     .catch((error) => {
-      //         console.error("Error converting blob to base64:", error);
-      //     });
+      //   const config = {
+      //     headers: { "content-type": "multipart/form-data" },
+      //   };
 
+      // submitAudio(data);
+      console.log("audioBlob", audioBlob);
       //creates a playable URL from the blob file.
       const audioUrl = URL.createObjectURL(audioBlob);
       setAudio(audioUrl);
@@ -137,7 +180,11 @@ const InterviewQuestions = () => {
   };
 
   const handleSubmit = () => {
-    navigate(`${APP_PREFIX}/interviewResponse`);
+    submitAudio(audioFormData)
+    .unwrap()
+    .then((res)=>toast.success(T.ANSWERS_SUBMITTED_SUCCESSFULLY))
+    .catch(errorHandler)
+    // navigate(`${APP_PREFIX}/interviewResponse`);
     // postAudio()
     //     .unwrap()
     //     .then(res => toast.success(T.ANSWERS_SUBMITTED_SUCCESSFULLY))

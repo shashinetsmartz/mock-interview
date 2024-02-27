@@ -68,10 +68,14 @@ const LoginForm = () => {
 
     if (isValid) {
       navigate(`${APP_PREFIX}/interviewQuiz`);
-      const payloadFormData = new FormData();
-      payloadFormData.append("user_name", empName);
-      payloadFormData.append("employee_code", empCode);
-      postUserInfo(payloadFormData)
+      const userInfoPayload={
+        user_name:empName,
+        employee_code:empCode
+      }
+      // const payloadFormData = new FormData();
+      // payloadFormData.append("user_name", empName);
+      // payloadFormData.append("employee_code", empCode);
+      postUserInfo(userInfoPayload)
         .unwrap()
         .then(() => navigate(`${APP_PREFIX}/interviewQuiz`))
         .catch(errorHandler);
