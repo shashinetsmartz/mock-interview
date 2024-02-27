@@ -27,7 +27,7 @@ const InterviewQuestions = () => {
   const [stream, setStream] = useState(null);
   const [audioChunks, setAudioChunks] = useState([]);
   const [audio, setAudio] = useState(null);
-  const [audioFormData, setAudioFormData] = useState(null);
+  const [audioFormData, setAudioFormData] = useState(new FormData());
   const [localState, setLocalState] = useReducer(
     (prevState, newState) => ({ ...prevState, ...newState }),
     {
@@ -151,15 +151,15 @@ const InterviewQuestions = () => {
       //       console.error("Error converting blob to base64:", error);
       //     });
 
-      let data = new FormData();
+      // let data = new FormData();
 
     //   data.append("text", "this is the transcription of the audio file");
-      data.append("audio_0", audioBlob, "recording.wav");
-      data.append("audio_1", audioBlob, "recording.wav");
-      data.append("audio_2", audioBlob, "recording.wav");
-      data.append("audio_3", audioBlob, "recording.wav");
-      data.append("audio_4", audioBlob, "recording.wav");
-      setAudioFormData(data)
+    audioFormData.append(`audio_${questionStep}`, audioBlob, "recording.wav");
+      // data.append("audio_1", audioBlob, "recording.wav");
+      // data.append("audio_2", audioBlob, "recording.wav");
+      // data.append("audio_3", audioBlob, "recording.wav");
+      // data.append("audio_4", audioBlob, "recording.wav");
+      setAudioFormData(audioFormData)
 
       //   const config = {
       //     headers: { "content-type": "multipart/form-data" },
