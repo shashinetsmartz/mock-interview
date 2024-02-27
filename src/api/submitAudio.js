@@ -4,9 +4,13 @@ const extendedApi = api.injectEndpoints({
   endpoints: (build) => ({
     submitAudio: build.mutation({
         query: (body) => ({
-          url: "/audio",
+          url: "/audios",
           method: "POST",
           body,
+          prepareHeaders: (headers) => {
+            headers.set("Content-Type", "multipart/form-data")
+              return headers
+          },
         }),
       })
   }),
