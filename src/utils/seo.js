@@ -12,6 +12,7 @@ const PAGE_TITLE = new Map([
   // override any existing route here
   [routes.app.home, "Home"],
   [routes.app.interviewQues, "Interview Questions"],
+  [routes.app.interviewRes, "Interview Assessment"],
   // [routes.app.changePwd, "Change Password"],
   ["default", "Error"],
 ]);
