@@ -31,14 +31,7 @@ const InterviewQuestions = () => {
   const [localState, setLocalState] = useReducer(
     (prevState, newState) => ({ ...prevState, ...newState }),
     {
-      // questionsList: [],
-      questionsList: [
-        "Please Introduce Yourself",
-        "What all projects are associated so far?",
-        "Describe a situation where you had to troubleshoot a complex technical issue. How did you approach it, and what was the outcome?",
-        "What is your work style ?",
-        "Describe a situation where you had to collaborate with cross-functional teams to achieve a common goal. What challenges did you face, and how did you overcome them?",
-      ],
+      questionsList: [],
       answersList: [],
       questionStep: 0,
     }
@@ -159,8 +152,10 @@ const InterviewQuestions = () => {
       // data.append("audio_2", audioBlob, "recording.wav");
       // data.append("audio_3", audioBlob, "recording.wav");
       // data.append("audio_4", audioBlob, "recording.wav");
+      let answersListCopy = [...answersList];
+      answersListCopy.push(audioBlob)
       setAudioFormData(audioFormData)
-
+      setLocalState({answersList:answersListCopy})
       //   const config = {
       //     headers: { "content-type": "multipart/form-data" },
       //   };
@@ -182,7 +177,12 @@ const InterviewQuestions = () => {
   const handleSubmit = () => {
     submitAudio(audioFormData)
     .unwrap()
-    .then((res)=>toast.success(T.ANSWERS_SUBMITTED_SUCCESSFULLY))
+    .then((res)=>
+    {
+      toast.success(T.ANSWERS_SUBMITTED_SUCCESSFULLY)
+      navigate(`${APP_PREFIX}/interviewResponse`)
+    }
+    )
     .catch(errorHandler)
     // navigate(`${APP_PREFIX}/interviewResponse`);
     // postAudio()
@@ -190,6 +190,11 @@ const InterviewQuestions = () => {
     //     .then(res => toast.success(T.ANSWERS_SUBMITTED_SUCCESSFULLY))
     //     .catch(errorHandler)
   };
+
+  console.log(questionsList.length,"questionsList.length")
+  console.log(answersList.length,"answersList.length")
+  console.log(questionStep,"questionStep")
+
   return (
     <Grid container>
       <Grid item xs={isMd?2:3.25} />
@@ -296,6 +301,7 @@ const InterviewQuestions = () => {
                         backgroundColor: "themeColor", // Change to your theme color
                       },
                     }}
+                    disabled={answersList.length > questionStep}
                     onClick={startRecording}
                   >
                     {T.ANSWER}
@@ -305,6 +311,7 @@ const InterviewQuestions = () => {
                 {recordingStatus === "recording" ? (
                   <Button
                     variant="contained"
+                    disabled={answersList.length < questionStep}
                     startIcon={
                       <StopCircleIcon
                         sx={{
@@ -333,7 +340,7 @@ const InterviewQuestions = () => {
                     Stop
                   </Button>
                 ) : null}
-                {audio ? (
+                {answersList.length === questionStep+1? (
                   <Box sx={{ display: "flex", alignItems: "center", marginBottom:2 }}>
                     <audio
                       src={audio}
@@ -351,6 +358,7 @@ const InterviewQuestions = () => {
                     variant="outlined"
                     onClick={handleNext}
                     endIcon={<ArrowForwardIcon />}
+                    disabled={answersList.length === questionStep}
                     sx={{
                       borderColor: "themeColor",
                       color: "black",
@@ -372,6 +380,7 @@ const InterviewQuestions = () => {
                   <Button
                     variant="outlined"
                     onClick={handleSubmit}
+                    disabled={answersList.length < questionsList.length}
                     sx={{
                       borderColor: "themeColor",
                       color: "black",
