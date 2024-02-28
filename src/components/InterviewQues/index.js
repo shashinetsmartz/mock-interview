@@ -133,7 +133,6 @@ const InterviewQuestions = () => {
     mediaRecorder.current.stop();
     mediaRecorder.current.onstop = () => {
       //creates a blob file from the audiochunks data
-      console.log("audioChunks", audioChunks);
       const audioBlob = new Blob(audioChunks, { type: mimeType });
       //   download(audioBlob);
       //   blobToBase64(audioBlob)
@@ -161,7 +160,6 @@ const InterviewQuestions = () => {
       //   };
 
       // submitAudio(data);
-      console.log("audioBlob", audioBlob);
       //creates a playable URL from the blob file.
       const audioUrl = URL.createObjectURL(audioBlob);
       setAudio(audioUrl);
@@ -191,9 +189,6 @@ const InterviewQuestions = () => {
     //     .catch(errorHandler)
   };
 
-  console.log(questionsList.length,"questionsList.length")
-  console.log(answersList.length,"answersList.length")
-  console.log(questionStep,"questionStep")
 
   return (
     <Grid container>
