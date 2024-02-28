@@ -77,7 +77,7 @@ const LoginForm = () => {
       // payloadFormData.append("employee_code", empCode);
       postUserInfo(userInfoPayload)
         .unwrap()
-        .then(() => navigate(`${APP_PREFIX}/interviewQuiz`))
+        .then(() => navigate(`${APP_PREFIX}/interviewQuiz?ques=0`))
         .catch(errorHandler);
     }
     // navigate(`${APP_PREFIX}/interviewQuiz`);

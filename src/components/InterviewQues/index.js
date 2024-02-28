@@ -9,14 +9,14 @@ import { useLazyGetQuestionQuery } from "api/getQuestion";
 import { usePostAudioMutation } from "api/postAudios";
 import { errorHandler } from "utils/errorHandler";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { APP_PREFIX } from "router/routes";
 import { GET_SIZE } from "utils/responsive";
 import { useSubmitAudioMutation } from "api/submitAudio";
 
 const InterviewQuestions = () => {
   const { isXs, isLg, isMd } = GET_SIZE();
-  const [getQuestion] = useLazyGetQuestionQuery();
+  const [getQuestion, {isFetching, data: question}] = useLazyGetQuestionQuery();
   const [postAudio] = usePostAudioMutation();
   const [submitAudio] = useSubmitAudioMutation();
   const navigate = useNavigate();
@@ -38,8 +38,13 @@ const InterviewQuestions = () => {
   );
 
   const { questionsList, answersList, questionStep } = localState;
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const quesStep = +searchParams.get("ques");
   useEffect(() => {
-    getQuestion(questionStep)
+    if(quesStep == null) return;
+    getQuestion(quesStep)
       .unwrap()
       .then((res) => {
         const questions = [...questionsList];
@@ -47,7 +52,8 @@ const InterviewQuestions = () => {
         setLocalState({ questionsList: questions });
       })
       .catch(errorHandler);
-  }, [questionStep]);
+  }, [quesStep]);
+
   const getMicrophonePermission = async () => {
     if ("MediaRecorder" in window) {
       try {
@@ -152,7 +158,7 @@ const InterviewQuestions = () => {
       // data.append("audio_3", audioBlob, "recording.wav");
       // data.append("audio_4", audioBlob, "recording.wav");
       let answersListCopy = [...answersList];
-      answersListCopy.push(audioBlob)
+      answersListCopy.push(URL.createObjectURL(audioBlob))
       setAudioFormData(audioFormData)
       setLocalState({answersList:answersListCopy})
       //   const config = {
@@ -167,8 +173,9 @@ const InterviewQuestions = () => {
     };
   };
   const handleNext = () => {
-    if (questionStep < questionsList.length) {
-      setLocalState({ questionStep: questionStep + 1 });
+    if (quesStep < questionsList.length) {
+      setLocalState({ questionStep: quesStep + 1 });
+      navigate(`${APP_PREFIX}/interviewQuiz?ques=${quesStep + 1}`)
     }
   };
 
@@ -217,7 +224,7 @@ const InterviewQuestions = () => {
         }}
       >
         {/* {questionStep < questionsList.length ? */}
-        {questionStep < 5 ? (
+        {quesStep< 5 ? (
           <Stack>
             <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
               <Typography
@@ -230,7 +237,7 @@ const InterviewQuestions = () => {
                 }}
               >
                 {/* {`Question ${questionStep + 1}/${questionsList.length}`} */}
-                {`Question ${questionStep + 1}/5`}
+                {`Question ${quesStep + 1}/5`}
               </Typography>
             </Box>
             <Typography
@@ -245,7 +252,8 @@ const InterviewQuestions = () => {
                 mb: 1.5,
               }}
             >
-              {questionsList[questionStep]}
+              {/* {questionsList[questionStep]} */}
+              {question?.question}
             </Typography>
           </Stack>
         ) : (
@@ -262,7 +270,7 @@ const InterviewQuestions = () => {
         <Box>
           {
             // questionStep < questionsList.length ?
-            questionStep < 5 ? (
+            quesStep < 5 ? (
               <Box sx={{ display: isXs?"block":"flex", justifyContent: "space-between" }}>
                 {/* {!permission ? (
                                     <button onClick={getMicrophonePermission} type="button">
@@ -296,7 +304,7 @@ const InterviewQuestions = () => {
                         backgroundColor: "themeColor", // Change to your theme color
                       },
                     }}
-                    disabled={answersList.length > questionStep}
+                    disabled={answersList.length > +quesStep}
                     onClick={startRecording}
                   >
                     {T.ANSWER}
@@ -335,10 +343,11 @@ const InterviewQuestions = () => {
                     Stop
                   </Button>
                 ) : null}
-                {answersList.length === questionStep+1? (
+                {console.log('answersList',answersList)}
+                {answersList.length > +quesStep? (
                   <Box sx={{ display: "flex", alignItems: "center", marginBottom:2 }}>
                     <audio
-                      src={audio}
+                      src={answersList[quesStep]}
                       controls
                       style={{ width: "220px", height: "40px" }}
                     />
@@ -347,8 +356,8 @@ const InterviewQuestions = () => {
                                         </a> */}
                   </Box>
                 ) : null}
-
-                {questionStep < 4 ? (
+{console.log('asdf',answersList.length,  questionsList.length)}
+                {quesStep < 4 ? (
                   <Button
                     variant="outlined"
                     onClick={handleNext}
@@ -375,7 +384,7 @@ const InterviewQuestions = () => {
                   <Button
                     variant="outlined"
                     onClick={handleSubmit}
-                    disabled={answersList.length < questionsList.length}
+                    disabled={answersList.length < 5}
                     sx={{
                       borderColor: "themeColor",
                       color: "black",
