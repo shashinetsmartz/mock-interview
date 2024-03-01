@@ -3,7 +3,6 @@ import React from "react";
 import { AppBar, Box } from "@mui/material";
 
 import NavigationMenu from "./NavigationMenu";
-import { BACKGROUND } from "theme/colors";
 
 const Header = () => {
   return (

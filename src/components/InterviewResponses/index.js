@@ -1,107 +1,27 @@
-// import { Box, Grid, Typography, styled } from '@mui/material';
-// import T from 'T';
-// import React from 'react';
-// import { MOCK_RESPONSES } from 'utils/mockData';
-// export const MainTitleTypography = styled(Typography)(() => ({
-//     fontWeight: 700,
-//     fontSize: 14,
-//     lineHeight: "22px",
-//     whiteSpace: "nowrap",
-// }));
-
-// export const SubTitleTypography = styled(Typography)(() => ({
-//     fontWeight: 600,
-//     fontSize: 14,
-//     lineHeight: "22px",
-//     whiteSpace: "nowrap",
-// }));
-
-// function convertToTitleCase(str) { return str.replace(/_/g, ' ').replace(/\b\w/g, function (char) { return char.toUpperCase(); }); }
-// const InterviewResponses = () => {
-//     return (
-//         <>
-//             <Grid container>
-//                 <Grid item xs={3} />
-//                 <Grid item xs={6}>
-//                     {
-//                         Object.keys(MOCK_RESPONSES).map(key => {
-//                             return (
-//                                 <Box display={"inline-flex"}>
-//                                     <MainTitleTypography variant="h6" sx={{
-//                                         textAlign: "center",
-//                                     }}>
-//                                         {`${convertToTitleCase(key)} : `}
-//                                     </MainTitleTypography>
-//                                     <SubTitleTypography>
-//                                         {MOCK_RESPONSES[key]}
-//                                     </SubTitleTypography>
-
-//                                 </Box>
-//                             )
-//                         })
-//                     }
-
-//                 </Grid>
-//                 <Grid item xs={3} />
-
-//             </Grid>
-//         </>
-//     );
-// };
-
-// export default InterviewResponses;
-
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Typography,
   Divider,
   Grid,
   Card,
-  styled,
   Box,
   Stack,
   Tooltip,
-  Button,
 } from "@mui/material";
-import { get } from "lodash";
 
 import InfoIcon from "@mui/icons-material/Info";
 
 import T from "T";
 import {
-  BACKGROUND,
   ERROR,
   NETSMARTZ_THEME_COLOR,
   SUCCESS,
-  TEXT,
 } from "theme/colors";
-import { MOCK_RESPONSES } from "utils/mockData";
 import { GET_SIZE } from "utils/responsive";
 import { useLocation } from "react-router-dom";
-// import ExpiringProjects from "assets/DashboardAssets/ExpiringProjects.png";
-// import MembersRamped from "assets/DashboardAssets/MembersRamped.png";
-// import NewProjects from "assets/DashboardAssets/NewProjects.png";
-// import OnBench from "assets/DashboardAssets/OnBench.png";
-// import MembersJoining from "assets/DashboardAssets/MembersJoining.png";
-// import MembersGettingRelieved from "assets/DashboardAssets/MembersGettingRelieved.png";
-// import PendingTaskButton from "assets/DashboardAssets/PendingTaskButton.png";
-// import { useLazyGetDashboardCountViewQuery } from "api/Dashboard/dashboardCountView";
-// import { Stack } from "@mui/system";
 
-const StyledTypography = styled(Typography)(() => ({
-  fontSize: 13,
-  margin: "3px auto",
-  wordWrap: "break-word",
-  textAlign: "center",
-  maxWidth: 175,
-}));
 
 const InterviewResponses = () => {
-  //   const [getDashboardCountView,{data:dashboardCount}] = useLazyGetDashboardCountViewQuery();
-  //   const records= get(dashboardCount,"results","");
-  //   useEffect(()=>{
-  //       getDashboardCountView()
-  //   },[])
   const { isXs } = GET_SIZE();
   function convertToTitleCase(str) {
     return str.replace(/_/g, " ").replace(/\b\w/g, function (char) {
@@ -122,7 +42,6 @@ console.log('location', location.state)
         <Card
           sx={{
             background: "background.white",
-            // opacity:0.8,
             height: "45%",
             margin: "auto",
             display: "flex",
@@ -142,7 +61,6 @@ console.log('location', location.state)
             alignItems={"center"}
             justifyContent={"center"}
           >
-            {/* color={BACKGROUND.white} */}
             <Typography
               variant="h6"
               margin="auto"

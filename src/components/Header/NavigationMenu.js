@@ -1,4 +1,3 @@
-// import { useLocation } from "react-router-dom";
 import { Box, Typography } from "@mui/material";
 
 import T from "T";
@@ -7,32 +6,7 @@ import { GET_SIZE } from "utils/responsive";
 
 const NavigationMenu = () => {
   const { isXs, isFoldableMobile } = GET_SIZE();
-  // const location = useLocation();
-  // const { pathname } = location;
-
-  // const getCurrentActiveTab = (childList) => {
-  //   if (!childList) return;
-  //   if (pathname.includes("edit")) {
-  //     const editPath = pathname.split("/");
-  //     editPath.pop();
-  //     const remainedPath = editPath.join("/");
-
-  //     return childList
-  //       .map((data) => data.includes(remainedPath))
-  //       .includes(true);
-  //   }
-
-  //   return childList.includes(pathname);
-  // };
-  // const {user}= MISCurrentUser();
-  // const userName =get(user,"username","")
-
-  // const menuItems = getAllMenuItems();
-
-  // const activeIndex = menuItems.findIndex(
-  //   ({ childList }) => childList && childList.includes(pathname)
-  // );
-
+  
   return (
     <Box
       display={isXs?"block":"flex"}
@@ -51,7 +25,7 @@ const NavigationMenu = () => {
             ? { display: "flex", color: "themeColor", width: "100%", justifyContent:"center" }
             : { display: "flex", color: "themeColor", position: "absolute", left: "31%" }
         }
-        // sx={{ flexGrow: 1, display: { xs: "none", sm: "none", md: "flex" } }}
+        
       >
         <Typography variant="h5" sx={{fontSize: {xs:"20px", sm:"24px"}, px:{xs:2}, py:{xs:1}}} textAlign={"center"} fontWeight={600}>{T.MOCK_INTERVIEW_TOOL}</Typography>
       </Box>
