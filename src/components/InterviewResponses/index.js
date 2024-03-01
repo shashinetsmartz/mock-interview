@@ -77,6 +77,7 @@ import {
 } from "theme/colors";
 import { MOCK_RESPONSES } from "utils/mockData";
 import { GET_SIZE } from "utils/responsive";
+import { useLocation } from "react-router-dom";
 // import ExpiringProjects from "assets/DashboardAssets/ExpiringProjects.png";
 // import MembersRamped from "assets/DashboardAssets/MembersRamped.png";
 // import NewProjects from "assets/DashboardAssets/NewProjects.png";
@@ -108,6 +109,8 @@ const InterviewResponses = () => {
     });
   }
 
+  const location = useLocation()
+console.log('location', location.state)
   const coloredCard = (item) => {
     return (
       <Box
@@ -187,7 +190,7 @@ const InterviewResponses = () => {
         {T.DASHBOARD_VIEW}
       </Typography>
       <Grid container p={3} spacing={3} sx={{mt:isXs && "30px"}}>
-        {MOCK_RESPONSES.map((item) => (
+        {location?.state?.map((item) => (
           <Grid item sm={6} lg={3} xs={12}>
             {coloredCard(item)}
           </Grid>

@@ -13,12 +13,15 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { APP_PREFIX } from "router/routes";
 import { GET_SIZE } from "utils/responsive";
 import { useSubmitAudioMutation } from "api/submitAudio";
+import { LoadingButton } from "@mui/lab";
+import SendIcon from "@mui/icons-material/Send";
 
 const InterviewQuestions = () => {
   const { isXs, isLg, isMd } = GET_SIZE();
-  const [getQuestion, {isFetching, data: question}] = useLazyGetQuestionQuery();
+  const [getQuestion, { isFetching, data: question }] =
+    useLazyGetQuestionQuery();
   const [postAudio] = usePostAudioMutation();
-  const [submitAudio] = useSubmitAudioMutation();
+  const [submitAudio, audioData] = useSubmitAudioMutation();
   const navigate = useNavigate();
   const mimeType = "audio/webm";
   const [permission, setPermission] = useState(false);
@@ -43,10 +46,12 @@ const InterviewQuestions = () => {
 
   const quesStep = +searchParams.get("ques");
   useEffect(() => {
-    if(quesStep == null) return;
+    if (quesStep == null) return;
+    console.log("first123");
     getQuestion(quesStep)
       .unwrap()
       .then((res) => {
+        console.log("inside ques");
         const questions = [...questionsList];
         questions.push(res?.question);
         setLocalState({ questionsList: questions });
@@ -71,6 +76,8 @@ const InterviewQuestions = () => {
       alert("The MediaRecorder API is not supported in your browser.");
     }
   };
+
+  console.log("audioData", audioData);
 
   useEffect(() => {
     getMicrophonePermission();
@@ -151,16 +158,16 @@ const InterviewQuestions = () => {
 
       // let data = new FormData();
 
-    //   data.append("text", "this is the transcription of the audio file");
-    audioFormData.append(`audio_${questionStep}`, audioBlob, "recording.wav");
+      //   data.append("text", "this is the transcription of the audio file");
+      audioFormData.append(`audio_${questionStep}`, audioBlob, "recording.wav");
       // data.append("audio_1", audioBlob, "recording.wav");
       // data.append("audio_2", audioBlob, "recording.wav");
       // data.append("audio_3", audioBlob, "recording.wav");
       // data.append("audio_4", audioBlob, "recording.wav");
       let answersListCopy = [...answersList];
-      answersListCopy.push(URL.createObjectURL(audioBlob))
-      setAudioFormData(audioFormData)
-      setLocalState({answersList:answersListCopy})
+      answersListCopy.push(URL.createObjectURL(audioBlob));
+      setAudioFormData(audioFormData);
+      setLocalState({ answersList: answersListCopy });
       //   const config = {
       //     headers: { "content-type": "multipart/form-data" },
       //   };
@@ -175,20 +182,20 @@ const InterviewQuestions = () => {
   const handleNext = () => {
     if (quesStep < questionsList.length) {
       setLocalState({ questionStep: quesStep + 1 });
-      navigate(`${APP_PREFIX}/interviewQuiz?ques=${quesStep + 1}`)
+      navigate(`${APP_PREFIX}/interviewQuiz?ques=${quesStep + 1}`);
     }
   };
 
   const handleSubmit = () => {
     submitAudio(audioFormData)
-    .unwrap()
-    .then((res)=>
-    {
-      toast.success(T.ANSWERS_SUBMITTED_SUCCESSFULLY)
-      navigate(`${APP_PREFIX}/interviewResponse`)
-    }
-    )
-    .catch(errorHandler)
+      .unwrap()
+      .then((res) => {
+        console.log("res", res);
+        localStorage.setItem("feedback", res);
+        toast.success(T.ANSWERS_SUBMITTED_SUCCESSFULLY);
+        navigate(`${APP_PREFIX}/interviewResponse`, { state: res });
+      })
+      .catch(errorHandler);
     // navigate(`${APP_PREFIX}/interviewResponse`);
     // postAudio()
     //     .unwrap()
@@ -196,13 +203,14 @@ const InterviewQuestions = () => {
     //     .catch(errorHandler)
   };
 
+  // console.log('FeedBack')
 
   return (
     <Grid container>
-      <Grid item xs={isMd?2:3.25} />
+      <Grid item xs={isMd ? 2 : 3.25} />
       <Grid
         item
-        xs={isMd?8:5.5}
+        xs={isMd ? 8 : 5.5}
         className="questionDiv"
         sx={{
           position: "absolute",
@@ -211,8 +219,8 @@ const InterviewQuestions = () => {
           transform: "translate(-50%, -50%)",
           minHeight: "270px",
           width: "inherit",
-          minWidth:"300px",
-          maxHeight:"650px",
+          minWidth: "300px",
+          maxHeight: "650px",
           backgroundColor: "background.white",
           borderRadius: "8px",
           padding: "50px",
@@ -224,7 +232,7 @@ const InterviewQuestions = () => {
         }}
       >
         {/* {questionStep < questionsList.length ? */}
-        {quesStep< 5 ? (
+        {quesStep < 5 ? (
           <Stack>
             <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
               <Typography
@@ -246,8 +254,8 @@ const InterviewQuestions = () => {
                 flexWrap: "wrap",
                 textAlign: "start",
                 // maxWidth: "40%",
-                fontSize: isXs?"1.3rem":"1.6rem",
-                lineHeight: isXs?"1.3":"1.6",
+                fontSize: isXs ? "1.3rem" : "1.6rem",
+                lineHeight: isXs ? "1.3" : "1.6",
                 fontWeight: "bold",
                 mb: 1.5,
               }}
@@ -271,7 +279,12 @@ const InterviewQuestions = () => {
           {
             // questionStep < questionsList.length ?
             quesStep < 5 ? (
-              <Box sx={{ display: isXs?"block":"flex", justifyContent: "space-between" }}>
+              <Box
+                sx={{
+                  display: isXs ? "block" : "flex",
+                  justifyContent: "space-between",
+                }}
+              >
                 {/* {!permission ? (
                                     <button onClick={getMicrophonePermission} type="button">
                                         Get Microphone
@@ -294,10 +307,10 @@ const InterviewQuestions = () => {
                     sx={{
                       fontSize: 16,
                       px: 3,
-                      width:isXs ? "100%": 125,
-                      minWidth:"90px",
+                      width: isXs ? "100%" : 125,
+                      minWidth: "90px",
                       py: 1.3,
-                      mb:2,
+                      mb: 2,
                       backgroundColor: "themeColor",
                       borderRadius: 2.1,
                       "&:hover": {
@@ -328,10 +341,10 @@ const InterviewQuestions = () => {
                     }
                     sx={{
                       fontSize: 16,
-                      width:isXs ? "100%": 125,
+                      width: isXs ? "100%" : 125,
                       px: 4,
                       py: 1.3,
-                      mb:2,
+                      mb: 2,
                       backgroundColor: "themeColor",
                       borderRadius: 2.1,
                       "&:hover": {
@@ -343,9 +356,15 @@ const InterviewQuestions = () => {
                     Stop
                   </Button>
                 ) : null}
-                {console.log('answersList',answersList)}
-                {answersList.length > +quesStep? (
-                  <Box sx={{ display: "flex", alignItems: "center", marginBottom:2 }}>
+                {console.log("answersList", answersList)}
+                {answersList.length > +quesStep ? (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      marginBottom: 2,
+                    }}
+                  >
                     <audio
                       src={answersList[quesStep]}
                       controls
@@ -356,7 +375,7 @@ const InterviewQuestions = () => {
                                         </a> */}
                   </Box>
                 ) : null}
-{console.log('asdf',answersList.length,  questionsList.length)}
+
                 {quesStep < 4 ? (
                   <Button
                     variant="outlined"
@@ -368,11 +387,11 @@ const InterviewQuestions = () => {
                       color: "black",
                       fontWeight: "bold",
                       borderRadius: 2,
-                      width: isXs?"100%":100,
+                      width: isXs ? "100%" : 100,
                       fontSize: "15px",
                       px: 1.4,
                       py: 1.3,
-                      mb:2,
+                      mb: 2,
                       "&:hover": {
                         borderColor: "themeColor", // Change to your theme color
                       },
@@ -384,17 +403,19 @@ const InterviewQuestions = () => {
                   <Button
                     variant="outlined"
                     onClick={handleSubmit}
-                    disabled={answersList.length < 5}
+                    disabled={
+                      answersList.length < 5 || audioData?.status == "pending"
+                    }
                     sx={{
                       borderColor: "themeColor",
                       color: "black",
                       fontWeight: "bold",
                       borderRadius: 2,
-                      width: isXs?"100%":100,
+                      width: isXs ? "100%" : 100,
                       fontSize: "15px",
                       px: 1.4,
                       py: 1.3,
-                      mb:2,
+                      mb: 2,
                       "&:hover": {
                         backgroundColor: "themeColor", // Change to your theme color
                         borderColor: NETSMARTZ_THEME_COLOR,
@@ -402,7 +423,7 @@ const InterviewQuestions = () => {
                       },
                     }}
                   >
-                    {T.SUBMIT}
+                    {audioData?.status == "pending" ? 'Submitting...' : T.SUBMIT}
                   </Button>
                 )}
               </Box>
@@ -426,7 +447,7 @@ const InterviewQuestions = () => {
           }
         </Box>
       </Grid>
-      <Grid item xs={isMd?2:3.25} />
+      <Grid item xs={isMd ? 2 : 3.25} />
     </Grid>
   );
 };
