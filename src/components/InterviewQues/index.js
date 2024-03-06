@@ -23,7 +23,7 @@ import { useSubmitAudioMutation } from "api/submitAudio";
 
 const InterviewQuestions = () => {
   const { isXs, isMd } = GET_SIZE();
-  const [getQuestion, { data: question }] =
+  const [getQuestion, { data: question, isFetching }] =
     useLazyGetQuestionQuery();
   const [submitAudio, audioData] = useSubmitAudioMutation();
   const navigate = useNavigate();
@@ -44,6 +44,8 @@ const InterviewQuestions = () => {
   );
 
   const { questionsList, answersList, questionStep } = localState;
+
+  console.log('question ===>', isFetching)
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -190,7 +192,7 @@ const InterviewQuestions = () => {
               }}
             >
               {/* {questionsList[questionStep]} */}
-              {question?.question ? (
+              {!isFetching ? (
                 question?.question
               ) : (
                 <Skeleton variant="rectangular" width={400} height={30} />
