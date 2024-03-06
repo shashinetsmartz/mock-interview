@@ -37,19 +37,6 @@ const LoginForm = () => {
     setErrors({ ...errors, [`${name}Err`]: "" });
   };
 
-  // const handleSubmit = () => {
-  //   if (empName && empCode) {
-  //     const payloadFormData = new FormData();
-  //     payloadFormData.append("user_name", empName);
-  //     payloadFormData.append("employee_code", empCode);
-  //     postUserInfo(payloadFormData)
-  //       .unwrap()
-  //       .then(() => navigate(`${APP_PREFIX}/interviewQuiz`))
-  //       .catch(errorHandler);
-  //   }
-  //   navigate(`${APP_PREFIX}/interviewQuiz`);
-  // };
-
   const handleSubmit = () => {
     let isValid = true;
     const newErrors = { empNameErr: "", empCodeErr: "" };
@@ -72,19 +59,14 @@ const LoginForm = () => {
         user_name:empName,
         employee_code:empCode
       }
-      // const payloadFormData = new FormData();
-      // payloadFormData.append("user_name", empName);
-      // payloadFormData.append("employee_code", empCode);
       postUserInfo(userInfoPayload)
         .unwrap()
         .then(() => navigate(`${APP_PREFIX}/interviewQuiz?ques=0`))
         .catch(errorHandler);
     }
-    // navigate(`${APP_PREFIX}/interviewQuiz`);
   };
   return (
     <Paper elevation={2} sx={{ p: "50px 50px", width: "250px" }}>
-      {/* {isFetching && <MISLoader />} */}
       <Typography
         variant="h5"
         textAlign="center"
@@ -125,7 +107,6 @@ const LoginForm = () => {
         variant="outlined"
         name="empCode"
         value={empCode}
-        // onKeyPress={handleKeyPress}
         sx={{
           "& .MuiOutlinedInput-input": {
             padding: "9.5px 14px",

@@ -14,21 +14,17 @@ import StopCircleIcon from "@mui/icons-material/StopCircle";
 import T from "T";
 import { NETSMARTZ_THEME_COLOR, TEXT } from "theme/colors";
 import { useLazyGetQuestionQuery } from "api/getQuestion";
-import { usePostAudioMutation } from "api/postAudios";
 import { errorHandler } from "utils/errorHandler";
 import { toast } from "react-toastify";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { APP_PREFIX } from "router/routes";
 import { GET_SIZE } from "utils/responsive";
 import { useSubmitAudioMutation } from "api/submitAudio";
-import { LoadingButton } from "@mui/lab";
-import SendIcon from "@mui/icons-material/Send";
 
 const InterviewQuestions = () => {
-  const { isXs, isLg, isMd } = GET_SIZE();
-  const [getQuestion, { isFetching, data: question }] =
+  const { isXs, isMd } = GET_SIZE();
+  const [getQuestion, { data: question }] =
     useLazyGetQuestionQuery();
-  const [postAudio] = usePostAudioMutation();
   const [submitAudio, audioData] = useSubmitAudioMutation();
   const navigate = useNavigate();
   const mimeType = "audio/webm";
@@ -37,7 +33,6 @@ const InterviewQuestions = () => {
   const [recordingStatus, setRecordingStatus] = useState("inactive");
   const [stream, setStream] = useState(null);
   const [audioChunks, setAudioChunks] = useState([]);
-  const [audio, setAudio] = useState(null);
   const [audioFormData, setAudioFormData] = useState(new FormData());
   const [localState, setLocalState] = useReducer(
     (prevState, newState) => ({ ...prevState, ...newState }),
@@ -107,47 +102,6 @@ const InterviewQuestions = () => {
     setAudioChunks(localAudioChunks);
   };
 
-  // const blobToBase64 = (blob) => {
-  //     return new Promise((resolve, reject) => {
-  //         const reader = new FileReader();
-  //         reader.onload = () => {
-  //             const base64String = reader.result.split(",")[1];
-  //             resolve(base64String);
-  //         };
-  //         reader.onerror = (error) => {
-  //             reject(error);
-  //         };
-  //         reader.readAsDataURL(blob);
-  //     });
-  // };
-
-  // const stopRecording = () => {
-  //   setRecordingStatus("inactive");
-  //   //stops the recording instance
-  //   mediaRecorder.current.stop();
-  //   mediaRecorder.current.onstop = () => {
-  //     //creates a blob file from the audiochunks data
-  //     const audioBlob = new Blob(audioChunks, { type: mimeType });
-
-  //     let data = new FormData();
-
-  //     // data.append(`audio_${questionStep}`, audioBlob, "recording.wav");
-
-  //     // blobToBase64(audioBlob)
-  //     //     .then((base64String) => {
-  //     //         console.log('base64String', base64String); // Base64 string of the audio blob
-  //     //     })
-  //     //     .catch((error) => {
-  //     //         console.error("Error converting blob to base64:", error);
-  //     //     });
-
-  //     //creates a playable URL from the blob file.
-  //     const audioUrl = URL.createObjectURL(audioBlob);
-  //     setAudio(audioUrl);
-  //     setAudioChunks([]);
-  //   };
-  // };
-
   const stopRecording = () => {
     setRecordingStatus("inactive");
     //stops the recording instance
@@ -155,35 +109,11 @@ const InterviewQuestions = () => {
     mediaRecorder.current.onstop = () => {
       //creates a blob file from the audiochunks data
       const audioBlob = new Blob(audioChunks, { type: mimeType });
-      //   download(audioBlob);
-      //   blobToBase64(audioBlob)
-      //     .then((base64String) => {
-      //       console.log("base64String", base64String); // Base64 string of the audio blob
-      //     })
-      //     .catch((error) => {
-      //       console.error("Error converting blob to base64:", error);
-      //     });
-
-      // let data = new FormData();
-
-      //   data.append("text", "this is the transcription of the audio file");
       audioFormData.append(`audio_${questionStep}`, audioBlob, "recording.wav");
-      // data.append("audio_1", audioBlob, "recording.wav");
-      // data.append("audio_2", audioBlob, "recording.wav");
-      // data.append("audio_3", audioBlob, "recording.wav");
-      // data.append("audio_4", audioBlob, "recording.wav");
       let answersListCopy = [...answersList];
       answersListCopy.push(URL.createObjectURL(audioBlob));
       setAudioFormData(audioFormData);
       setLocalState({ answersList: answersListCopy });
-      //   const config = {
-      //     headers: { "content-type": "multipart/form-data" },
-      //   };
-
-      // submitAudio(data);
-      //creates a playable URL from the blob file.
-      const audioUrl = URL.createObjectURL(audioBlob);
-      setAudio(audioUrl);
       setAudioChunks([]);
     };
   };
@@ -204,14 +134,7 @@ const InterviewQuestions = () => {
         navigate(`${APP_PREFIX}/interviewResponse`, { state: res });
       })
       .catch(errorHandler);
-    // navigate(`${APP_PREFIX}/interviewResponse`);
-    // postAudio()
-    //     .unwrap()
-    //     .then(res => toast.success(T.ANSWERS_SUBMITTED_SUCCESSFULLY))
-    //     .catch(errorHandler)
   };
-
-  // console.log('FeedBack')
 
   return (
     <Grid container>
@@ -239,7 +162,6 @@ const InterviewQuestions = () => {
           overflowY: "auto",
         }}
       >
-        {/* {questionStep < questionsList.length ? */}
         {quesStep < 5 ? (
           <Stack>
             <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
@@ -252,7 +174,6 @@ const InterviewQuestions = () => {
                   marginBottom: 1,
                 }}
               >
-                {/* {`Question ${questionStep + 1}/${questionsList.length}`} */}
                 {`Question ${quesStep + 1}/5`}
               </Typography>
             </Box>
@@ -262,7 +183,6 @@ const InterviewQuestions = () => {
               sx={{
                 flexWrap: "wrap",
                 textAlign: "start",
-                // maxWidth: "40%",
                 fontSize: isXs ? "1.3rem" : "1.6rem",
                 lineHeight: isXs ? "1.3" : "1.6",
                 fontWeight: "bold",
@@ -290,7 +210,6 @@ const InterviewQuestions = () => {
         )}
         <Box>
           {
-            // questionStep < questionsList.length ?
             quesStep < 5 ? (
               <Box
                 sx={{
@@ -298,11 +217,6 @@ const InterviewQuestions = () => {
                   justifyContent: "space-between",
                 }}
               >
-                {/* {!permission ? (
-                                    <button onClick={getMicrophonePermission} type="button">
-                                        Get Microphone
-                                    </button>
-                                ) : null} */}
                 {permission && recordingStatus === "inactive" ? (
                   <Button
                     variant="contained"
@@ -383,9 +297,6 @@ const InterviewQuestions = () => {
                       controls
                       style={{ width: "220px", height: "40px" }}
                     />
-                    {/* <a download href={audio}>
-                                            Download Recording
-                                        </a> */}
                   </Box>
                 ) : null}
 
