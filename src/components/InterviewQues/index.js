@@ -1,4 +1,12 @@
-import { Box, Button, Divider, Grid, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  Grid,
+  Skeleton,
+  Stack,
+  Typography,
+} from "@mui/material";
 import React, { useEffect, useReducer, useRef, useState } from "react";
 import MicIcon from "@mui/icons-material/Mic";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
@@ -248,6 +256,7 @@ const InterviewQuestions = () => {
                 {`Question ${quesStep + 1}/5`}
               </Typography>
             </Box>
+
             <Typography
               variant="h6"
               sx={{
@@ -261,7 +270,11 @@ const InterviewQuestions = () => {
               }}
             >
               {/* {questionsList[questionStep]} */}
-              {question?.question}
+              {question?.question ? (
+                question?.question
+              ) : (
+                <Skeleton variant="rectangular" width={400} height={30} />
+              )}
             </Typography>
           </Stack>
         ) : (
@@ -423,7 +436,9 @@ const InterviewQuestions = () => {
                       },
                     }}
                   >
-                    {audioData?.status == "pending" ? 'Submitting...' : T.SUBMIT}
+                    {audioData?.status == "pending"
+                      ? "Submitting..."
+                      : T.SUBMIT}
                   </Button>
                 )}
               </Box>
